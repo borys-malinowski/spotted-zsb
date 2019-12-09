@@ -4,18 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="description" content="Strona na której uczniowie ZSB w Rybniku mogą wylać swoje żale.">
+    <meta name="keywords" content="ZSB Rybnik, Szkoła, Technikum.">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap&subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Spotted ZSB</title>
 </head>
 <body>
-   <form method="POST" action="http://localhost:8080/api/add-post"> <!--miejsce gdzie jest przesyłany formularz-->
-       <fieldset>
-           <legend>słoik</legend>
-           Imię:
-           <input type="text" name="topic">
-           Nazwisko:
-           <input type="text" name="text">
-           <button type="submit">Submit</button>
-       </fieldset>
-   </form> 
+    <div id="wrapper">
+        <header>
+            Spotted ZSB
+        </header>
+        <main>
+          <div id="add-post-form">
+            <form method="POST" action="http://localhost:8080/api/add-post">
+                <h2>Dodaj post:</h2>
+                <div><input id="add-post-form-title" type="text" name="topic" required placeholder="Temat posta"></div>
+                <div><textarea id="add-post-form-text" name="text" required placeholder="Napisz co Ci na serduszku leży"></textarea></div>
+                <div>
+                    Właściciel strony nie ponosi odpowiedzialności za treści tworzone przez użytkowników, publikowane na
+                    swojej
+                    stronie internetowej. Właściciel strony nie ponosi odpowiedzialności za szkody powstałe wskutek tych
+                    treści.
+                    Każdy, kto zamieszcza jakiekolwiek komentarze/oceny na stronie internetowej, sam jest odpowiedzialny
+                    za dany
+                    wpis jako jego autor. W przypadku naruszenia praw osób trzecich, osoba je naruszająca w pełni
+                    zwalnia
+                    właściciela strony z tytułu szkód i pozwów. Właściciel strony zastrzega sobie prawo do usunięcia
+                    treści,
+                    które są sprzeczne z prawem, dobrymi obyczajami lub szkodzą wizerunkowi; w tym przypadku nie ma
+                    możliwości
+                    wniesienia roszczenia względem właściciela strony.
+                </div>
+                <div id="add-post-form-submit"><button id="add-post-form-submit-button" type="submit">Wyślij</button></div>
+            </form>
+          </div>
+          <div id="all-posts"></div>
+        </main>
+    </div>
+    <footer></footer>
+    <script src="js/index.js"></script>
 </body>
 </html>

@@ -1,0 +1,25 @@
+{
+  "name": "spotted-zsb",
+  "version": "1.0.0",
+  "description": "spotted-zsb",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc --build tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/borys-malinowski/spotted-zsb.git"
+  },
+  "keywords": [
+    "spotted"
+  ],
+  "author": "",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/borys-malinowski/spotted-zsb/issues"
+  },
+  "homepage": "https://github.com/borys-malinowski/spotted-zsb#readme",
+  "dependencies": {
+    "typescript": "^3.7.3"
+  }
+}

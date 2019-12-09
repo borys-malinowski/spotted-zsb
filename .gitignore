@@ -1,0 +1,5 @@
+node_modules
+src/public/css/*.css
+src/public/css/*.css.map
+src/public/js/*.js.map
+src/public/js/*.js

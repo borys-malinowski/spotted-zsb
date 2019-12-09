@@ -7,43 +7,59 @@ import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/microcosm-cc/bluemonday"
 )
+
+type Post struct {
+	title string `json:"title"`
+	content string `json:"content"`
+	id uint `json:"id"`
+}
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
+	db, err := sql.Open("mysql", "root:@/spottedzsb")
+	checkError(err)
+	defer db.Close()
 	router := gin.Default()
-	router.Use(static.Serve("/", static.LocalFile("public", false)))
-	router.POST("/api/add-post", addPost)
-	router.GET("/api/get-posts", getPosts)
+	go router.Use(database(db))
+	go router.Use(static.Serve("/", static.LocalFile("public", false)))
+	go router.POST("/api/add-post", addPost)
+	go router.GET("/api/get-posts", getPosts)
 	router.Run()
 }
 
+func database(db *sql.DB) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		context.Set("DB", db)
+		context.Next()
+	}
+}
+
 func addPost(context *gin.Context) {
-	topic := context.PostForm("topic")
-	text := context.PostForm("text")
+	sanitizer := bluemonday.UGCPolicy()
+	topic := sanitizer.Sanitize(context.PostForm("topic"))
+	text := sanitizer.Sanitize(context.PostForm("text"))
 	if topic != "" && text != "" {
-		db, err := sql.Open("mysql", "root:@/spottedzsb")
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		defer db.Close()
+		db := context.MustGet("DB").(*sql.DB)
 		result, err := db.Query("INSERT INTO posts (title, content) VALUES ('" + topic + "', '" + text + "')")
-		if err != nil {
-			fmt.Println(err.Error())
-		}
+		checkError(err)
 		defer result.Close()
-		context.File("public/index.html")
-		context.Status(200)
+		context.Redirect(301, "/")
 	}
 }
 
 func getPosts(context *gin.Context) {
-	db, err := sql.Open("mysql", "root:@/spottedzsb")
+	db := context.MustGet("DB").(*sql.DB)
+	result, err := db.Query("SELECT * FROM posts")
+	checkError(err)
+	defer result.Close()
+	resultJSON := jsonify.Jsonify(result)
+	context.JSON(200, resultJSON)
+}
+
+func checkError(err error) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	defer db.Close()
-	result, err := db.Query("SELECT * FROM posts")
-	resultJSON := jsonify.Jsonify(result)
-	context.JSON(200, resultJSON)
 }
